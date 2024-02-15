@@ -54,7 +54,7 @@ app.post("/register", async (req, res) => {
 					});
 				})
 				.catch((error) =>
-					res.status(400).json({
+					res.status(422).json({
 						success: false,
 						message: "User could not be created, try again later",
 						error: error.message,
