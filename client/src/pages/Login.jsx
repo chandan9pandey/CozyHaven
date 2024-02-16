@@ -7,6 +7,8 @@ const Login = () => {
 		password: "",
 	});
 
+	const [errors, setErrors] = useState({});
+
 	const baseUrl = import.meta.env.VITE_BASE_URL; // Server Url
 
 	const handleLogin = async (e) => {
@@ -15,29 +17,47 @@ const Login = () => {
 			email: formData?.email,
 			password: formData?.password,
 		};
-		const requestOptions = {
-			method: "POST",
-			headers: {
-				Accept: "application/json",
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(data),
-		};
-		try {
-			const response = await fetch(
-				`${baseUrl.concat("login")}`,
-				requestOptions
-			);
-			const res = await response.json();
-			// console.log(res);
-			if (res.success) {
-				localStorage.setItem("auth-token", res.token);
-				window.location.replace("/");
-			} else {
-				alert(res.error);
+
+		const validationErrors = {};
+		if (!formData?.email.trim()) {
+			validationErrors.email = "Please enter your email address";
+		} else if (!/^\S+@\S+\.\S+$/.test(formData?.email)) {
+			validationErrors.email = "Email address is invalid";
+		}
+		if (!formData?.password.trim()) {
+			validationErrors.password = "Please enter your password";
+		} else if (formData?.password.length < 6) {
+			validationErrors.password =
+				"Password should be at least 6 characters long";
+		}
+
+		setErrors(validationErrors);
+
+		if (Object.keys(validationErrors).length === 0) {
+			const requestOptions = {
+				method: "POST",
+				headers: {
+					Accept: "application/json",
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(data),
+			};
+			try {
+				const response = await fetch(
+					`${baseUrl.concat("login")}`,
+					requestOptions
+				);
+				const res = await response.json();
+				// console.log(res);
+				if (res.success) {
+					localStorage.setItem("auth-token", res.token);
+					window.location.replace("/");
+				} else {
+					alert(res.error);
+				}
+			} catch (error) {
+				console.log(error);
 			}
-		} catch (error) {
-			console.log(error);
 		}
 	};
 
@@ -59,14 +79,20 @@ const Login = () => {
 						onChange={handleInputChange}
 						name="email"
 					/>
+					{errors.email && (
+						<span className="text-red-500 text-lg">{errors.email}</span>
+					)}
 					<input
 						className="w-full border my-2 py-2 px-3 rounded-full"
 						type="password"
 						placeholder="Password"
 						value={formData?.password}
 						onChange={handleInputChange}
-						nam="password"
+						name="password"
 					/>
+					{errors.password && (
+						<span className="text-red-500 text-lg">{errors.password}</span>
+					)}
 					<button
 						className="bg-primary p-2 w-full text-white text-lg rounded-2xl my-3"
 						onClick={(e) => handleLogin(e)}

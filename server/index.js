@@ -64,6 +64,65 @@ app.post("/register", async (req, res) => {
 	}
 });
 
+// to Login user
+
+app.post("/login", async (req, res) => {
+	const { email, password } = req.body;
+	if (!email || !password) {
+		return res.status(400).json({
+			success: false,
+			error: "Please fill in all the required fields",
+		});
+	}
+	try {
+		const user = await User.findOne({ email });
+		if (!user) {
+			res.status(400).json({
+				success: false,
+				message: "Login failed",
+				error: "User not found",
+			});
+		} else {
+			bcrypt.compare(password, user.password).then(function (result) {
+				if (result) {
+					const maxAge = 3 * 60 * 60;
+					const token = jwt.sign(
+						{
+							id: user._id,
+							email,
+						},
+						process.env.JWT_SECRET_KEY,
+						{
+							expiresIn: maxAge, // 3hrs in seconds
+						}
+					);
+					res.cookie("jwt", token, {
+						httpOnly: true,
+						maxAge: maxAge * 1000, // 3hrs in ms
+					});
+					res.status(201).json({
+						success: true,
+						message: "User successfully Logged in",
+						user: user._id,
+						token,
+					});
+				} else {
+					res.status(400).json({
+						success: false,
+						error: "The username or password you entered is incorrect.",
+					});
+				}
+			});
+		}
+	} catch (error) {
+		res.status(400).json({
+			success: false,
+			message: "An error occurred",
+			error,
+		});
+	}
+});
+
 app.get("/", (req, res) => {
 	res.send("Everything is fine!");
 });
