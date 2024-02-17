@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 
 const Login = () => {
 	const [formData, setFormData] = useState({
@@ -8,6 +9,8 @@ const Login = () => {
 	});
 
 	const [errors, setErrors] = useState({});
+
+	const { setUser } = useContext(UserContext);
 
 	const baseUrl = import.meta.env.VITE_BASE_URL; // Server Url
 
@@ -51,6 +54,7 @@ const Login = () => {
 				// console.log(res);
 				if (res.success) {
 					localStorage.setItem("auth-token", res.token);
+					setUser(res.name);
 					window.location.replace("/");
 				} else {
 					alert(res.error);

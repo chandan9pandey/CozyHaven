@@ -104,6 +104,7 @@ app.post("/login", async (req, res) => {
 						success: true,
 						message: "User successfully Logged in",
 						user: user._id,
+						name: user.name,
 						token,
 					});
 				} else {
@@ -121,6 +122,27 @@ app.post("/login", async (req, res) => {
 			error,
 		});
 	}
+});
+
+// creating middleware to fetch user
+
+const fetchUser = async (req, res, next) => {
+	try {
+		const token = req.header("auth-token");
+		if (!token) return res.status(403).send({ error: "Access Denied" });
+		const data = jwt.verify(token, process.env.JWT_SECRET_KEY);
+		req.user = data;
+		next();
+	} catch (error) {
+		res.status(400).send({ error: "Invalid Token" });
+	}
+};
+
+// to fetch profile
+
+app.post("/profile", fetchUser, async (req, res) => {
+	let { name, email, _id } = await User.findOne({ _id: req.user.id });
+	res.json({ name, email, _id });
 });
 
 app.get("/", (req, res) => {
