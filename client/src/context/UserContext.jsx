@@ -5,6 +5,8 @@ export const UserContext = createContext({});
 const UserContextProvider = (props) => {
 	const [loggedIn, setLoggedIn] = useState(false);
 	const [user, setUser] = useState(null);
+	const [ready, setReady] = useState(false);
+	const [email, setEmail] = useState(null);
 
 	const baseUrl = import.meta.env.VITE_BASE_URL; // Server Url
 
@@ -23,15 +25,20 @@ const UserContextProvider = (props) => {
 				.then((response) => response.json())
 				.then((data) => {
 					localStorage.setItem("name", data.name), setUser(data.name);
-					localStorage.setItem("email", data.email);
+					localStorage.setItem("email", data.email), setEmail(data.email);
 				});
+			setReady(true);
 		}
 	}, []);
 
 	const contextValue = {
 		loggedIn,
+		setLoggedIn,
 		user,
 		setUser,
+		ready,
+		email,
+		setEmail,
 	};
 
 	return (

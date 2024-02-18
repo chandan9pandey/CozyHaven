@@ -6,7 +6,7 @@ export const Header = () => {
 	const { user } = useContext(UserContext);
 	return (
 		<header className="flex justify-between">
-			<a href="" className="flex items-center ">
+			<Link to={"/"} className="flex items-center ">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
@@ -22,7 +22,7 @@ export const Header = () => {
 					/>
 				</svg>
 				<span className="text-2xl  px-5 font-bold">CozyHaven</span>
-			</a>
+			</Link>
 			<div className=" flex space-x-5 border border-grey-300 shadow-md shadow-gray-300 rounded-full py-2 px-4">
 				<div>Anywhere</div>
 				<div className="border-l border-gray-300"></div>
