@@ -11,6 +11,7 @@ app.use(express.json());
 app.use(cors());
 
 const User = require("./models/user");
+const Place = require("./models/place");
 
 // to register user
 
