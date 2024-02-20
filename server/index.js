@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 const bcrypt = require("bcrypt");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
+const imageDownloader = require("image-downloader");
 
 dotenv.config();
 app.use(express.json());
@@ -12,6 +13,8 @@ app.use(cors());
 
 const User = require("./models/user");
 const Place = require("./models/place");
+
+app.use("/", express.static("uploads/"));
 
 // to register user
 
@@ -144,6 +147,22 @@ const fetchUser = async (req, res, next) => {
 app.post("/profile", fetchUser, async (req, res) => {
 	let { name, email, _id } = await User.findOne({ _id: req.user.id });
 	res.json({ name, email, _id });
+});
+
+// upload photo by link
+
+app.post("/upload-by-link", async (req, res) => {
+	const { link } = req.body;
+	try {
+		const newName = "photo" + Date.now() + ".jpg";
+		await imageDownloader.image({
+			url: link,
+			dest: __dirname + "/uploads/" + newName,
+		});
+		res.json(newName);
+	} catch (error) {
+		console.log(error);
+	}
 });
 
 app.get("/", (req, res) => {
