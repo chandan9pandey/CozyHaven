@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Perks from "../components/Perks";
 import axios from "axios";
+import PhotosUploader from "../components/PhotosUploader";
 
 const Places = () => {
 	const { action } = useParams();
 	const [title, setTitle] = useState("");
 	const [address, setAddress] = useState("");
-	const [photoLink, setPhotoLink] = useState("");
 	const [addedPhotos, setAddedPhotos] = useState([]);
 	const [description, setDescription] = useState("");
 	const [perks, setPerks] = useState([]);
@@ -33,19 +33,7 @@ const Places = () => {
 			</>
 		);
 	};
-	const addPhotoByLink = async (ev) => {
-		ev.preventDefault();
-		const { data: filename } = await axios.post(
-			`${baseUrl.concat("upload-by-link")}`,
-			{
-				link: photoLink,
-			}
-		);
-		setAddedPhotos((prev) => {
-			return [...prev, filename];
-		});
-		setPhotoLink("");
-	};
+
 	return (
 		<div>
 			{action !== "new" && (
@@ -93,44 +81,10 @@ const Places = () => {
 							placeholder="address"
 						/>
 						{preInput("Photos", "more = better")}
-						<h2>Photos</h2>
-						<div className="flex gap-2">
-							<input
-								className="w-full border my-2 py-2 px-3 rounded-full"
-								type="text"
-								value={photoLink}
-								onChange={(ev) => setPhotoLink(ev.target.value)}
-								placeholder={"Add using a link ...jpg"}
-							/>
-							<button
-								onClick={addPhotoByLink}
-								className="bg-gray-200 px-3 rounded-2xl"
-							>
-								Add Photo
-							</button>
-						</div>
-
-						<div className="mt-2 grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 ">
-							{addedPhotos.length > 0 &&
-								addedPhotos.map((link) => <div>{link}</div>)}
-							<button className="flex border justify-center gap-1 bg-transparent rounded-2xl p-8 text-2xl  text-gray-600">
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									fill="none"
-									viewBox="0 0 24 24"
-									strokeWidth={1.5}
-									stroke="currentColor"
-									className="w-8 h-8"
-								>
-									<path
-										strokeLinecap="round"
-										strokeLinejoin="round"
-										d="M12 16.5V9.75m0 0 3 3m-3-3-3 3M6.75 19.5a4.5 4.5 0 0 1-1.41-8.775 5.25 5.25 0 0 1 10.233-2.33 3 3 0 0 1 3.758 3.848A3.752 3.752 0 0 1 18 19.5H6.75Z"
-									/>
-								</svg>
-								Upload
-							</button>
-						</div>
+						<PhotosUploader
+							addedPhotos={addedPhotos}
+							onChange={setAddedPhotos}
+						/>
 						{preInput("Description", "description of the place")}
 						<textarea
 							value={description}
@@ -169,6 +123,7 @@ const Places = () => {
 								<input
 									className="w-full border my-2 py-2 px-3 rounded-2xl"
 									type="text"
+									value={checkOut}
 									onChange={(ev) => setCheckOut(ev.target.value)}
 									placeholder="11:00"
 								/>

@@ -6,6 +6,8 @@ const bcrypt = require("bcrypt");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const imageDownloader = require("image-downloader");
+const multer = require("multer");
+const fs = require("fs");
 
 dotenv.config();
 app.use(express.json());
@@ -14,7 +16,7 @@ app.use(cors());
 const User = require("./models/user");
 const Place = require("./models/place");
 
-app.use("/", express.static("uploads/"));
+app.use("/uploads", express.static("uploads/"));
 
 // to register user
 
@@ -163,6 +165,25 @@ app.post("/upload-by-link", async (req, res) => {
 	} catch (error) {
 		console.log(error);
 	}
+});
+
+// photos middleware
+
+const photosMiddleware = multer({ dest: "uploads/" });
+
+// to upload photo from device
+
+app.post("/upload", photosMiddleware.array("photos", 100), async (req, res) => {
+	const uploadedFiles = [];
+	for (let i = 0; i < req.files.length; i++) {
+		const { path, originalname } = req.files[i];
+		const parts = originalname.split(".");
+		const ext = parts[parts.length - 1];
+		const newPath = path + "." + ext;
+		fs.renameSync(path, newPath);
+		uploadedFiles.push(newPath.replace("uploads", ""));
+	}
+	res.json(uploadedFiles);
 });
 
 app.get("/", (req, res) => {

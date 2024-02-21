@@ -57,7 +57,7 @@ const Login = () => {
 					setUser(res.name);
 					window.location.replace("/");
 				} else {
-					alert(res.error);
+					alert(res.message);
 				}
 			} catch (error) {
 				console.log(error);
