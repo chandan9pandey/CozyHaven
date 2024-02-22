@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Perks from "../components/Perks";
 import PhotosUploader from "../components/PhotosUploader";
 import axios from "axios";
 import AccountNav from "./AccountNav";
+import { useParams } from "react-router-dom";
 
 const PlacesForm = () => {
+	const { placeId } = useParams();
 	const [title, setTitle] = useState("");
 	const [address, setAddress] = useState("");
 	const [addedPhotos, setAddedPhotos] = useState([]);
@@ -17,6 +19,27 @@ const PlacesForm = () => {
 	const [price, setPrice] = useState("");
 
 	const baseUrl = import.meta.env.VITE_BASE_URL; // Server Url
+
+	useEffect(() => {
+		if (!placeId) {
+			return;
+		}
+		axios
+			.get(`${baseUrl.concat("places/").concat(placeId)}`)
+			.then((response) => {
+				const { data } = response;
+				setTitle(data.title);
+				setAddress(data.address);
+				setAddedPhotos(data.photos);
+				setDescription(data.description);
+				setPerks(data.perks);
+				setExtraInfo(data.extraInfo);
+				setCheckIn(data.checkIn);
+				setCheckOut(data.checkOut);
+				setMaxGuests(data.maxGuests);
+				setPrice(data.price);
+			});
+	}, [placeId]);
 
 	const inputHeader = (text) => {
 		return <h2 className="text-2xl mt-4">{text}</h2>;
@@ -47,6 +70,29 @@ const PlacesForm = () => {
 			maxGuests,
 			price,
 		};
+
+		if (placeId) {
+			try {
+				await axios
+					.put(
+						`${baseUrl.concat("places")}`,
+						{ placeId, ...placeData },
+						{
+							headers: {
+								Accept: "application/json",
+								"auth-token": `${localStorage.getItem("auth-token")}`,
+								"Content-Type": "application/json",
+							},
+						}
+					)
+					.then((response) => {
+						alert(response);
+					})
+					.then((window.location = "/account/places"));
+			} catch (error) {
+				console.log(error);
+			}
+		}
 
 		// new place
 		try {

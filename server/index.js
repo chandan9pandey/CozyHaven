@@ -222,6 +222,59 @@ app.post("/places", fetchUser, async (req, res) => {
 	}
 });
 
+// to fetch user places
+
+app.get("/user-places", fetchUser, async (req, res) => {
+	let { id } = await User.findOne({ _id: req.user.id });
+	res.json(await Place.find({ owner: id }));
+});
+
+// to get specific places
+
+app.get("/places/:id", async (req, res) => {
+	const { id } = req.params;
+	res.json(await Place.findById(id));
+});
+
+// to edit user places
+
+app.put("/places", fetchUser, async (req, res) => {
+	let { id } = await User.findOne({ _id: req.user.id });
+	const {
+		placeId,
+		title,
+		address,
+		addedPhotos,
+		description,
+		perks,
+		extraInfo,
+		checkIn,
+		checkOut,
+		maxGuests,
+		price,
+	} = req.body;
+	try {
+		const placeDoc = await Place.findById(placeId);
+		if (id === placeDoc.owner.toString()) {
+			placeDoc.set({
+				title,
+				address,
+				photos: addedPhotos,
+				description,
+				perks,
+				extraInfo,
+				checkIn,
+				checkOut,
+				maxGuests,
+				price,
+			});
+			await placeDoc.save();
+			res.json("Place Updated Successfully");
+		}
+	} catch (error) {
+		console.log(error);
+	}
+});
 app.get("/", (req, res) => {
 	res.send("Everything is fine!");
 });
