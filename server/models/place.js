@@ -18,10 +18,10 @@ const placeSchema = new mongoose.Schema({
 		type: String,
 	},
 	perks: {
-		type: String,
+		type: [String],
 	},
 	extraInfo: {
-		type: [String],
+		type: String,
 	},
 	checkIn: {
 		type: Number,
@@ -30,6 +30,9 @@ const placeSchema = new mongoose.Schema({
 		type: Number,
 	},
 	maxGuests: {
+		type: Number,
+	},
+	price: {
 		type: Number,
 	},
 });

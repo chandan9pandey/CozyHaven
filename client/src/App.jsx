@@ -4,9 +4,11 @@ import "./App.css";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Account from "./pages/Account";
+import Profile from "./pages/Profile";
 import Layout from "./layout/Layout";
 import UserContextProvider from "./context/UserContext";
+import Places from "./pages/Places";
+import PlacesForm from "./components/PlacesForm";
 
 function App() {
 	return (
@@ -16,8 +18,9 @@ function App() {
 					<Route index element={<Home />} />
 					<Route path="/login" element={<Login />} />
 					<Route path="/register" element={<Register />} />
-					<Route path="/account/:subpage?" element={<Account />} />
-					<Route path="/account/:subpage/:action" element={<Account />} />
+					<Route path="/account" element={<Profile />} />
+					<Route path="/account/places" element={<Places />} />
+					<Route path="/account/places/new" element={<PlacesForm />} />
 				</Route>
 			</Routes>
 		</UserContextProvider>

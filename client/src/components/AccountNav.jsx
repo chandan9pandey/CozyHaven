@@ -1,21 +1,10 @@
-import React, { useContext } from "react";
-import { UserContext } from "../context/UserContext";
-import { Link, Navigate, useLocation } from "react-router-dom";
-import Places from "./Places";
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
 
-const Account = () => {
-	const { user, setUser, ready, email, setLoggedIn } = useContext(UserContext);
-
-	if (!ready) {
-		return " Loading...";
-	}
-
-	if (ready && !user) {
-		return <Navigate to={"/login"} />;
-	}
-
+const AccountNav = () => {
 	const { pathname } = useLocation();
 	let subpage = pathname.split("/")?.[2];
+
 	if (subpage === undefined) {
 		subpage = "profile";
 	}
@@ -29,7 +18,6 @@ const Account = () => {
 		}
 		return classes;
 	}
-
 	return (
 		<div>
 			<nav className="w-full justify-center flex mt-8 gap-2 mb-8">
@@ -85,27 +73,8 @@ const Account = () => {
 					My Accommodations
 				</Link>
 			</nav>
-			{subpage === "profile" && (
-				<div className="text-center text-lg">
-					Logged in as {user} ({email})<br />
-					<button
-						onClick={() => {
-							localStorage.removeItem("auth-token");
-							localStorage.removeItem("name");
-							localStorage.removeItem("email");
-							setLoggedIn(false);
-							setUser(null);
-							window.location.replace("/");
-						}}
-						className="bg-primary text-white rounded-full max-w-lg mx-auto mt-2 px-5"
-					>
-						Logout
-					</button>
-				</div>
-			)}
-			{subpage === "places" && <Places />}
 		</div>
 	);
 };
 
-export default Account;
+export default AccountNav;

@@ -186,6 +186,42 @@ app.post("/upload", photosMiddleware.array("photos", 100), async (req, res) => {
 	res.json(uploadedFiles);
 });
 
+// to add a place
+
+app.post("/places", fetchUser, async (req, res) => {
+	let userId = await User.findOne({ _id: req.user.id });
+	const {
+		title,
+		address,
+		addedPhotos,
+		description,
+		perks,
+		extraInfo,
+		checkIn,
+		checkOut,
+		maxGuests,
+		price,
+	} = req.body;
+	try {
+		const placeDoc = await Place.create({
+			owner: userId,
+			title,
+			address,
+			photos: addedPhotos,
+			description,
+			perks,
+			extraInfo,
+			checkIn,
+			checkOut,
+			maxGuests,
+			price,
+		});
+		res.json(placeDoc);
+	} catch (error) {
+		console.log(error);
+	}
+});
+
 app.get("/", (req, res) => {
 	res.send("Everything is fine!");
 });
