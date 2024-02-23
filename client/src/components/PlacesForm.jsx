@@ -70,7 +70,7 @@ const PlacesForm = () => {
 			maxGuests,
 			price,
 		};
-
+		// update place
 		if (placeId) {
 			try {
 				await axios
@@ -124,7 +124,6 @@ const PlacesForm = () => {
 					"Title for your place. should be short and catchy as in advertisement"
 				)}
 				<input
-					className="w-full border my-2 py-2 px-3 rounded-full"
 					type="text"
 					value={title}
 					onChange={(ev) => setTitle(ev.target.value)}
@@ -132,7 +131,6 @@ const PlacesForm = () => {
 				/>
 				{preInput("Address", "Address to this place")}
 				<input
-					className="w-full border my-2 py-2 px-3 rounded-full"
 					type="text"
 					value={address}
 					onChange={(ev) => setAddress(ev.target.value)}
@@ -144,7 +142,6 @@ const PlacesForm = () => {
 				<textarea
 					value={description}
 					onChange={(ev) => setDescription(ev.target.value)}
-					className="w-full border my-2 py-2 px-3 rounded-2xl"
 				/>
 				{preInput("Perks", "select all the perks of your place")}
 				<div className="grid mt-2 gap-2 grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
@@ -154,7 +151,6 @@ const PlacesForm = () => {
 				<textarea
 					value={extraInfo}
 					onChange={(ev) => setExtraInfo(ev.target.value)}
-					className="w-full border my-2 py-2 px-3 rounded-2xl"
 				/>
 				{preInput(
 					"Check in & out times",
@@ -165,7 +161,6 @@ const PlacesForm = () => {
 						{" "}
 						<h3 className="mt-2 -mb-1">Check in time</h3>
 						<input
-							className="w-full border my-2 py-2 px-3 rounded-2xl"
 							type="text"
 							value={checkIn}
 							onChange={(ev) => setCheckIn(ev.target.value)}
@@ -176,7 +171,6 @@ const PlacesForm = () => {
 						{" "}
 						<h3 className="mt-2 -mb-1">Check out time</h3>
 						<input
-							className="w-full border my-2 py-2 px-3 rounded-2xl"
 							type="text"
 							value={checkOut}
 							onChange={(ev) => setCheckOut(ev.target.value)}
@@ -186,7 +180,6 @@ const PlacesForm = () => {
 					<div>
 						<h3 className="mt-2 -mb-1">Max number of guests</h3>
 						<input
-							className="w-full border my-2 py-2 px-3 rounded-2xl"
 							type="number"
 							value={maxGuests}
 							onChange={(ev) => setMaxGuests(ev.target.value)}
@@ -195,7 +188,6 @@ const PlacesForm = () => {
 					<div>
 						<h3 className="mt-2 -mb-1">Price per night</h3>
 						<input
-							className="w-full border my-2 py-2 px-3 rounded-2xl"
 							type="number"
 							value={price}
 							onChange={(ev) => setPrice(ev.target.value)}

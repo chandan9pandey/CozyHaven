@@ -77,7 +77,6 @@ const Register = () => {
 				<h1 className="text-4xl text-center mb-4 font-bold">Register</h1>
 				<form className="max-w-md mx-auto" action="">
 					<input
-						className="w-full border my-2 py-2 px-3 rounded-full"
 						type="text"
 						placeholder="Name"
 						value={formData?.name}
@@ -88,7 +87,6 @@ const Register = () => {
 						<span className="text-red-500 text-lg">{errors.name}</span>
 					)}
 					<input
-						className="w-full border my-2 py-2 px-3 rounded-full"
 						type="email"
 						placeholder="Email"
 						value={formData?.email}
@@ -99,7 +97,6 @@ const Register = () => {
 						<span className="text-red-500 text-lg">{errors.email}</span>
 					)}
 					<input
-						className="w-full border my-2 py-2 px-3 rounded-full"
 						type="password"
 						placeholder="Password"
 						value={formData?.password}
