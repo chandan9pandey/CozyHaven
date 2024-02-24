@@ -275,6 +275,11 @@ app.put("/places", fetchUser, async (req, res) => {
 		console.log(error);
 	}
 });
+
+app.get("/places", async (req, res) => {
+	res.json(await Place.find());
+});
+
 app.get("/", (req, res) => {
 	res.send("Everything is fine!");
 });
