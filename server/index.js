@@ -305,6 +305,13 @@ app.post("/bookings", fetchUser, async (req, res) => {
 		});
 });
 
+// to fetch user bookings
+
+app.get("/bookings", fetchUser, async (req, res) => {
+	let { id } = await User.findOne({ _id: req.user.id });
+	res.json(await Booking.find({ user: id }).populate("place"));
+});
+
 app.get("/", (req, res) => {
 	res.send("Everything is fine!");
 });
