@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import AddressLink from "../components/AddressLink";
 import PlaceGallery from "../components/PlaceGallery";
+import BookingWidget from "../components/BookingWidget";
 
 const Place = () => {
 	const { id } = useParams();
@@ -43,6 +44,9 @@ const Place = () => {
 					Check-out: {place.checkOut}
 					<br />
 					Max number of guests: {place.maxGuests}
+				</div>
+				<div>
+					<BookingWidget place={place} />
 				</div>
 			</div>
 			<div className="bg-white -mx-8 px-8 py-8 border-t">
