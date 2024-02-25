@@ -15,6 +15,7 @@ app.use(cors());
 
 const User = require("./models/user");
 const Place = require("./models/place");
+const Booking = require("./models/booking");
 
 app.use("/uploads", express.static("uploads/"));
 
