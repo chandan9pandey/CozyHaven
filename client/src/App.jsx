@@ -10,6 +10,8 @@ import UserContextProvider from "./context/UserContext";
 import Places from "./pages/Places";
 import PlacesForm from "./components/PlacesForm";
 import Place from "./pages/Place";
+import Bookings from "./pages/Bookings";
+import Booking from "./pages/Booking";
 
 function App() {
 	return (
@@ -24,6 +26,8 @@ function App() {
 					<Route path="/account/places/new" element={<PlacesForm />} />
 					<Route path="/account/places/:placeId" element={<PlacesForm />} />
 					<Route path="/place/:id" element={<Place />} />
+					<Route path="/account/bookings" element={<Bookings />} />
+					<Route path="/account/bookings/:id" element={<Booking />} />
 				</Route>
 			</Routes>
 		</UserContextProvider>
