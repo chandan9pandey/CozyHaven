@@ -281,6 +281,30 @@ app.get("/places", async (req, res) => {
 	res.json(await Place.find());
 });
 
+// for bookings
+
+app.post("/bookings", fetchUser, async (req, res) => {
+	let userId = await User.findOne({ _id: req.user.id });
+	const { place, checkIn, checkOut, numberOfGuests, name, phone, price } =
+		req.body;
+	Booking.create({
+		place,
+		checkIn,
+		checkOut,
+		numberOfGuests,
+		name,
+		phone,
+		price,
+		user: userId,
+	})
+		.then((doc) => {
+			res.json(doc);
+		})
+		.catch((err) => {
+			throw err;
+		});
+});
+
 app.get("/", (req, res) => {
 	res.send("Everything is fine!");
 });

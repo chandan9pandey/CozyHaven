@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { Navigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import { differenceInCalendarDays } from "date-fns";
 
@@ -10,8 +9,9 @@ const BookingWidget = ({ place }) => {
 	const [numberOfGuests, setNumberOfGuests] = useState(1);
 	const [name, setName] = useState("");
 	const [phone, setPhone] = useState("");
-	const [redirect, setRedirect] = useState("");
-	const { user } = useContext(UserContext);
+	const { user, loggedIn } = useContext(UserContext);
+
+	const [errors, setErrors] = useState({});
 
 	const baseUrl = import.meta.env.VITE_BASE_URL; // Server Url
 
@@ -30,7 +30,8 @@ const BookingWidget = ({ place }) => {
 	}
 
 	const bookThisPlace = async () => {
-		const response = await axios.post(`${baseUrl}.concat("bookings")`, {
+		const validationErrors = {};
+		const bookingData = {
 			checkIn,
 			checkOut,
 			numberOfGuests,
@@ -38,8 +39,36 @@ const BookingWidget = ({ place }) => {
 			phone,
 			place: place._id,
 			price: numberOfNights * place.price,
-		});
-		const bookingId = response.data._id;
+		};
+		if (!loggedIn) {
+			alert("Please Login to confirm your booking");
+		}
+		if (!checkIn.trim()) {
+			validationErrors.checkIn = "Please enter your Check In Date";
+		}
+		if (!checkOut.trim()) {
+			validationErrors.checkOut = "Please enter your Check Out Date";
+		}
+		if (!phone.match("[0-9]{10}")) {
+			validationErrors.phone = "Please enter a valid Phone Number";
+		}
+
+		setErrors(validationErrors);
+
+		if (Object.keys(validationErrors).length === 0) {
+			const response = await axios
+				.post(`${baseUrl}`.concat("bookings"), bookingData, {
+					headers: {
+						Accept: "application/json",
+						"auth-token": `${localStorage.getItem("auth-token")}`,
+						"Content-Type": "application/json",
+					},
+				})
+				.then((response) => {
+					const bookingId = response.data._id;
+					window.location = `/account/bookings/${bookingId}`;
+				});
+		}
 	};
 
 	return (
@@ -55,17 +84,27 @@ const BookingWidget = ({ place }) => {
 							type="date"
 							value={checkIn}
 							onChange={(ev) => setCheckIn(ev.target.value)}
+							min={new Date().toJSON().slice(0, 10)} // check-in date constraint
 						/>
 					</div>
+
 					<div className="py-3 px-4 border-l">
 						<label>Check out:</label>
 						<input
 							type="date"
 							value={checkOut}
 							onChange={(ev) => setCheckOut(ev.target.value)}
+							max="2025-12-31" // check-out date constraint
 						/>
 					</div>
 				</div>
+				{errors.checkIn && (
+					<span className="text-red-500 text-lg  px-4">{errors.checkIn}</span>
+				)}
+				<br />
+				{errors.checkOut && (
+					<span className="text-red-500 text-lg  px-4">{errors.checkOut}</span>
+				)}
 				<div className="py-3 px-4 border-t">
 					<label>Number of guests:</label>
 					<input
@@ -89,6 +128,9 @@ const BookingWidget = ({ place }) => {
 							value={phone}
 							onChange={(ev) => setPhone(ev.target.value)}
 						/>
+						{errors.phone && (
+							<span className="text-red-500 text-lg">{errors.phone}</span>
+						)}
 					</div>
 				)}
 			</div>

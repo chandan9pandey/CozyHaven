@@ -25,9 +25,7 @@ const Profile = () => {
 					Logged in as {user} ({email})<br />
 					<button
 						onClick={() => {
-							localStorage.removeItem("auth-token");
-							localStorage.removeItem("name");
-							localStorage.removeItem("email");
+							localStorage.clear();
 							setLoggedIn(false);
 							setUser(null);
 							window.location.replace("/");
