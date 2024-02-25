@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, Navigate } from "react-router-dom";
 import axios from "axios";
 import AccountNav from "../components/AccountNav";
+import PlaceImage from "../components/PlaceImage";
 
 const Places = () => {
 	const [places, setPlaces] = useState([]);
@@ -56,10 +57,7 @@ const Places = () => {
 							key={place}
 						>
 							<div className="flex w-32 h-32 bg-gray-300 grow shrink-0">
-								<img
-									src={`${baseUrl.concat("uploads/").concat(place.photos[0])}`}
-									alt=""
-								/>
+								<PlaceImage place={place} />
 							</div>
 							<div className="grow-0 shrink">
 								<h2 className="text-xl">{place.title}</h2>

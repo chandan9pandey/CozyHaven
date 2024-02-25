@@ -194,7 +194,7 @@ const PlacesForm = () => {
 						/>
 					</div>
 				</div>
-				<button className="bg-primary my-4 rounded-full px-5 py-2 text-white text-xl ">
+				<button className="bg-primary my-4 rounded-full px-5 py-2 text-white text-xl w-full ">
 					Save
 				</button>
 			</form>
