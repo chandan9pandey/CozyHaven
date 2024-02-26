@@ -30,44 +30,48 @@ const BookingWidget = ({ place }) => {
 	}
 
 	const bookThisPlace = async () => {
-		const validationErrors = {};
-		const bookingData = {
-			checkIn,
-			checkOut,
-			numberOfGuests,
-			name,
-			phone,
-			place: place._id,
-			price: numberOfNights * place.price,
-		};
-		if (!loggedIn) {
-			alert("Please Login to confirm your booking");
-		}
-		if (!checkIn.trim()) {
-			validationErrors.checkIn = "Please enter your Check In Date";
-		}
-		if (!checkOut.trim()) {
-			validationErrors.checkOut = "Please enter your Check Out Date";
-		}
-		if (!phone.match("[0-9]{10}")) {
-			validationErrors.phone = "Please enter a valid Phone Number";
-		}
+		if (loggedIn) {
+			const validationErrors = {};
+			const bookingData = {
+				checkIn,
+				checkOut,
+				numberOfGuests,
+				name,
+				phone,
+				place: place._id,
+				price: numberOfNights * place.price,
+			};
+			if (!loggedIn) {
+				alert("Please Login to confirm your booking");
+			}
+			if (!checkIn.trim()) {
+				validationErrors.checkIn = "Please enter your Check In Date";
+			}
+			if (!checkOut.trim()) {
+				validationErrors.checkOut = "Please enter your Check Out Date";
+			}
+			if (!phone.match("[0-9]{10}")) {
+				validationErrors.phone = "Please enter a valid Phone Number";
+			}
 
-		setErrors(validationErrors);
+			setErrors(validationErrors);
 
-		if (Object.keys(validationErrors).length === 0) {
-			const response = await axios
-				.post(`${baseUrl}`.concat("bookings"), bookingData, {
-					headers: {
-						Accept: "application/json",
-						"auth-token": `${localStorage.getItem("auth-token")}`,
-						"Content-Type": "application/json",
-					},
-				})
-				.then((response) => {
-					const bookingId = response.data._id;
-					window.location = `/account/bookings/${bookingId}`;
-				});
+			if (Object.keys(validationErrors).length === 0) {
+				const response = await axios
+					.post(`${baseUrl}`.concat("bookings"), bookingData, {
+						headers: {
+							Accept: "application/json",
+							"auth-token": `${localStorage.getItem("auth-token")}`,
+							"Content-Type": "application/json",
+						},
+					})
+					.then((response) => {
+						const bookingId = response.data._id;
+						window.location = `/account/bookings/${bookingId}`;
+					});
+			}
+		} else {
+			alert("Please Login to book this place");
 		}
 	};
 
@@ -94,6 +98,7 @@ const BookingWidget = ({ place }) => {
 							type="date"
 							value={checkOut}
 							onChange={(ev) => setCheckOut(ev.target.value)}
+							min={checkIn}
 							max="2025-12-31" // check-out date constraint
 						/>
 					</div>
