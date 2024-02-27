@@ -3,9 +3,11 @@ import { Link, Navigate } from "react-router-dom";
 import axios from "axios";
 import AccountNav from "../components/AccountNav";
 import PlaceImage from "../components/PlaceImage";
+import { Grid } from "react-loader-spinner";
 
 const Places = () => {
 	const [places, setPlaces] = useState([]);
+	const [loading, setLoading] = useState(true);
 
 	const baseUrl = import.meta.env.VITE_BASE_URL; // Server Url
 
@@ -21,6 +23,7 @@ const Places = () => {
 				})
 				.then(({ data }) => {
 					setPlaces(data);
+					setLoading(false);
 				});
 		}
 	}, []);
@@ -48,24 +51,41 @@ const Places = () => {
 					Add new place
 				</Link>
 			</div>
-			<div className="mt-4">
-				{places.length > 0 &&
-					places.map((place) => (
-						<Link
-							to={"/account/places/" + place._id}
-							className="flex cursor-pointer gap-4 bg-gray-100 p-4 rounded-2xl"
-							key={place}
-						>
-							<div className="flex w-32 h-32 bg-gray-300 grow shrink-0">
-								<PlaceImage place={place} />
-							</div>
-							<div className="grow-0 shrink">
-								<h2 className="text-xl">{place.title}</h2>
-								<p className="text-sm mt-2">{place.description}</p>
-							</div>
-						</Link>
-					))}
-			</div>
+			{loading ? (
+				<div className="h-screen flex items-center justify-center">
+					<Grid
+						visible={true}
+						height="90"
+						width="90"
+						color="#F5385D"
+						ariaLabel="grid-loading"
+						radius="12.5"
+						wrapperStyle={{}}
+						wrapperClass="grid-wrapper"
+					/>
+				</div>
+			) : (
+				<>
+					<div className="mt-4">
+						{places.length > 0 &&
+							places.map((place) => (
+								<Link
+									to={"/account/places/" + place._id}
+									className="flex cursor-pointer gap-4 bg-gray-100 p-4 rounded-2xl"
+									key={place}
+								>
+									<div className="flex w-32 h-32 bg-gray-300 grow shrink-0">
+										<PlaceImage place={place} />
+									</div>
+									<div className="grow-0 shrink">
+										<h2 className="text-xl">{place.title}</h2>
+										<p className="text-sm mt-2">{place.description}</p>
+									</div>
+								</Link>
+							))}
+					</div>
+				</>
+			)}
 		</div>
 	);
 };
