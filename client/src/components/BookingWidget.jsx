@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { UserContext } from "../context/UserContext";
 import { differenceInCalendarDays } from "date-fns";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const BookingWidget = ({ place }) => {
 	const [checkIn, setCheckIn] = useState("");
@@ -14,6 +16,17 @@ const BookingWidget = ({ place }) => {
 	const [errors, setErrors] = useState({});
 
 	const baseUrl = import.meta.env.VITE_BASE_URL; // Server Url
+
+	const toastProperties = {
+		position: "top-right",
+		autoClose: 5000,
+		hideProgressBar: false,
+		closeOnClick: true,
+		pauseOnHover: true,
+		draggable: true,
+		progress: undefined,
+		theme: "light",
+	};
 
 	useEffect(() => {
 		if (user) {
@@ -45,33 +58,45 @@ const BookingWidget = ({ place }) => {
 				alert("Please Login to confirm your booking");
 			}
 			if (!checkIn.trim()) {
+				toast.error("Please enter your Check In Date", toastProperties);
 				validationErrors.checkIn = "Please enter your Check In Date";
 			}
 			if (!checkOut.trim()) {
+				toast.error("Please enter your Check Out Date", toastProperties);
 				validationErrors.checkOut = "Please enter your Check Out Date";
 			}
-			if (!phone.match("[0-9]{10}")) {
+			if (checkIn > checkOut) {
+				toast.error("Check In must be prior to Check Out", toastProperties);
+				validationErrors.dateError = "Check In must be prior to Check Out";
+			}
+
+			if (!phone.match("[0-9]{10}") && checkIn && checkOut) {
+				toast.error("Please enter a valid Phone Number", toastProperties);
 				validationErrors.phone = "Please enter a valid Phone Number";
 			}
 
 			setErrors(validationErrors);
 
-			if (Object.keys(validationErrors).length === 0) {
-				const response = await axios
-					.post(`${baseUrl}`.concat("bookings"), bookingData, {
-						headers: {
-							Accept: "application/json",
-							"auth-token": `${localStorage.getItem("auth-token")}`,
-							"Content-Type": "application/json",
-						},
-					})
-					.then((response) => {
-						const bookingId = response.data._id;
-						window.location = `/account/bookings/${bookingId}`;
-					});
+			try {
+				if (Object.keys(validationErrors).length === 0) {
+					const response = await axios
+						.post(`${baseUrl}`.concat("bookings"), bookingData, {
+							headers: {
+								Accept: "application/json",
+								"auth-token": `${localStorage.getItem("auth-token")}`,
+								"Content-Type": "application/json",
+							},
+						})
+						.then((response) => {
+							const bookingId = response.data._id;
+							window.location = `/account/bookings/${bookingId}`;
+						});
+				}
+			} catch (error) {
+				throw error;
 			}
 		} else {
-			alert("Please Login to book this place");
+			toast.error("Please Login to book this place");
 		}
 	};
 
@@ -83,7 +108,7 @@ const BookingWidget = ({ place }) => {
 			<div className="border rounded-2xl mt-4">
 				<div className="flex">
 					<div className="py-3 px-4">
-						<label>Check in:</label>
+						<label>Check in : </label>
 						<input
 							type="date"
 							value={checkIn}
@@ -93,23 +118,26 @@ const BookingWidget = ({ place }) => {
 					</div>
 
 					<div className="py-3 px-4 border-l">
-						<label>Check out:</label>
+						<label>Check out : </label>
 						<input
 							type="date"
 							value={checkOut}
 							onChange={(ev) => setCheckOut(ev.target.value)}
-							min={checkIn}
+							min={checkIn === "" ? new Date().toJSON().slice(0, 10) : checkIn}
 							max="2025-12-31" // check-out date constraint
 						/>
 					</div>
 				</div>
-				{errors.checkIn && (
+				{/* {errors.checkIn && (
 					<span className="text-red-500 text-lg  px-4">{errors.checkIn}</span>
 				)}
 				<br />
 				{errors.checkOut && (
 					<span className="text-red-500 text-lg  px-4">{errors.checkOut}</span>
 				)}
+				{errors.dateError && (
+					<span className="text-red-500 text-lg  px-4">{errors.dateError}</span>
+				)} */}
 				<div className="py-3 px-4 border-t">
 					<label>Number of guests:</label>
 					<input
@@ -133,9 +161,9 @@ const BookingWidget = ({ place }) => {
 							value={phone}
 							onChange={(ev) => setPhone(ev.target.value)}
 						/>
-						{errors.phone && (
+						{/* {errors.phone && (
 							<span className="text-red-500 text-lg">{errors.phone}</span>
-						)}
+						)} */}
 					</div>
 				)}
 			</div>
