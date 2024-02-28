@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Register = () => {
 	const [formData, setFormData] = useState({
@@ -12,6 +14,17 @@ const Register = () => {
 
 	const baseUrl = import.meta.env.VITE_BASE_URL; // Server Url
 
+	const toastProperties = {
+		position: "top-right",
+		autoClose: 5000,
+		hideProgressBar: false,
+		closeOnClick: true,
+		pauseOnHover: true,
+		draggable: true,
+		progress: undefined,
+		theme: "light",
+	};
+
 	const handleRegister = async (e) => {
 		e.preventDefault();
 		const data = {
@@ -23,17 +36,22 @@ const Register = () => {
 		const validationErrors = {};
 		if (!formData?.name.trim()) {
 			validationErrors.name = "Please enter your name";
+			toast.error(validationErrors.name, toastProperties);
 		}
 		if (!formData?.email.trim()) {
 			validationErrors.email = "Please enter your email address";
+			toast.error(validationErrors.email, toastProperties);
 		} else if (!/^\S+@\S+\.\S+$/.test(formData?.email)) {
 			validationErrors.email = "Email address is invalid";
+			toast.error(validationErrors.email, toastProperties);
 		}
 		if (!formData?.password.trim()) {
 			validationErrors.password = "Please enter your password";
+			toast.error(validationErrors.password, toastProperties);
 		} else if (formData?.password.length < 6) {
 			validationErrors.password =
 				"Password should be at least 6 characters long";
+			toast.error(validationErrors.password, toastProperties);
 		}
 
 		setErrors(validationErrors);
@@ -56,9 +74,16 @@ const Register = () => {
 				// console.log(res);
 				if (res.success) {
 					localStorage.setItem("auth-token", res.token);
-					window.location.replace("/");
+					toast.success(
+						"Congrats! Your account has been successfully registered.",
+						toastProperties
+					);
+					setTimeout(() => {
+						window.location.replace("/");
+					}, 3000);
 				} else {
-					alert(res.error);
+					let message = res.error;
+					toast.error(message, toastProperties);
 				}
 			} catch (error) {
 				console.log(error);
@@ -83,9 +108,9 @@ const Register = () => {
 						onChange={handleInputChange}
 						name="name"
 					/>
-					{errors.name && (
+					{/* {errors.name && (
 						<span className="text-red-500 text-lg">{errors.name}</span>
-					)}
+					)} */}
 					<input
 						type="email"
 						placeholder="Email"
@@ -93,9 +118,9 @@ const Register = () => {
 						onChange={handleInputChange}
 						name="email"
 					/>
-					{errors.email && (
+					{/* {errors.email && (
 						<span className="text-red-500 text-lg">{errors.email}</span>
-					)}
+					)} */}
 					<input
 						type="password"
 						placeholder="Password"
@@ -103,9 +128,9 @@ const Register = () => {
 						onChange={handleInputChange}
 						name="password"
 					/>
-					{errors.password && (
+					{/* {errors.password && (
 						<span className="text-red-500 text-lg">{errors.password}</span>
-					)}
+					)} */}
 					<button
 						className="bg-primary p-2 w-full text-white text-lg rounded-2xl my-3"
 						onClick={(e) => handleRegister(e)}

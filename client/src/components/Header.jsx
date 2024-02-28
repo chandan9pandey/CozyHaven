@@ -23,7 +23,7 @@ export const Header = () => {
 				</svg>
 				<span className="text-2xl  px-5 font-bold">CozyHaven</span>
 			</Link>
-			<div className=" flex space-x-5 border border-grey-300 shadow-md shadow-gray-300 rounded-full py-2 px-4">
+			<div className=" flex space-x-5 border border-grey-300 shadow-md shadow-gray-300 rounded-full py-2 px-4 font-semibold">
 				<div>Anywhere</div>
 				<div className="border-l border-gray-300"></div>
 				<div>Any Week</div>

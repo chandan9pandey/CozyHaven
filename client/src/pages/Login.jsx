@@ -36,22 +36,19 @@ const Login = () => {
 
 		const validationErrors = {};
 		if (!formData?.email.trim()) {
-			toast.error("Please enter your email address", toastProperties);
 			validationErrors.email = "Please enter your email address";
+			toast.error(validationErrors.email, toastProperties);
 		} else if (!/^\S+@\S+\.\S+$/.test(formData?.email)) {
-			toast.error("Email address is invalid", toastProperties);
 			validationErrors.email = "Email address is invalid";
+			toast.error(validationErrors.email, toastProperties);
 		}
 		if (!formData?.password.trim()) {
-			toast.error("Please enter your password", toastProperties);
 			validationErrors.password = "Please enter your password";
+			toast.error(validationErrors.password, toastProperties);
 		} else if (formData?.password.length < 6) {
-			toast.error(
-				"Password should be at least 6 characters long",
-				toastProperties
-			);
 			validationErrors.password =
 				"Password should be at least 6 characters long";
+			toast.error(validationErrors.password, toastProperties);
 		}
 
 		setErrors(validationErrors);
@@ -75,9 +72,13 @@ const Login = () => {
 				if (res.success) {
 					localStorage.setItem("auth-token", res.token);
 					setUser(res.name);
-					window.location.replace("/");
+					toast.success(res.message, toastProperties);
+					setTimeout(() => {
+						window.location.replace("/");
+					}, 3000);
 				} else {
-					alert(res.message);
+					let message = res.error;
+					toast.error(message, toastProperties);
 				}
 			} catch (error) {
 				console.log(error);
