@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import Image from "../components/Image";
 import { Grid } from "react-loader-spinner";
 
 const Home = () => {
@@ -43,11 +44,9 @@ const Home = () => {
 							<Link to={"/place/" + place._id} key={place._id}>
 								<div className="bg-gray-500 mb-2 rounded-2xl flex">
 									{place.photos?.[0] && (
-										<img
+										<Image
 											className="rounded-2xl object-cover aspect-square"
-											src={`${baseUrl
-												.concat("uploads/")
-												.concat(place.photos?.[0])}`}
+											src={place.photos?.[0]}
 											alt=""
 										/>
 									)}

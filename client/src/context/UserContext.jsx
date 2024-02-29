@@ -11,23 +11,27 @@ const UserContextProvider = (props) => {
 	const baseUrl = import.meta.env.VITE_BASE_URL; // Server Url
 
 	useEffect(() => {
-		if (localStorage.getItem("auth-token")) {
-			setLoggedIn(true);
-			fetch(`${baseUrl.concat("profile")}`, {
-				method: "POST",
-				headers: {
-					Accept: "application/json",
-					"auth-token": `${localStorage.getItem("auth-token")}`,
-					"Content-Type": "application/json",
-				},
-				body: "",
-			})
-				.then((response) => response.json())
-				.then((data) => {
-					localStorage.setItem("name", data.name), setUser(data.name);
-					localStorage.setItem("email", data.email), setEmail(data.email);
-				});
-			setReady(true);
+		try {
+			if (localStorage.getItem("auth-token")) {
+				setLoggedIn(true);
+				fetch(`${baseUrl.concat("profile")}`, {
+					method: "POST",
+					headers: {
+						Accept: "application/json",
+						"auth-token": `${localStorage.getItem("auth-token")}`,
+						"Content-Type": "application/json",
+					},
+					body: "",
+				})
+					.then((response) => response.json())
+					.then((data) => {
+						localStorage.setItem("name", data.name), setUser(data.name);
+						localStorage.setItem("email", data.email), setEmail(data.email);
+					});
+				setReady(true);
+			}
+		} catch (error) {
+			console.log(error);
 		}
 	}, []);
 
