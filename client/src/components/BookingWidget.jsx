@@ -89,7 +89,13 @@ const BookingWidget = ({ place }) => {
 						})
 						.then((response) => {
 							const bookingId = response.data._id;
-							window.location = `/account/bookings/${bookingId}`;
+							toast.success(
+								"Thank you, we look forward to meet you soon! ",
+								toastProperties
+							);
+							setTimeout(() => {
+								window.location = `/account/bookings/${bookingId}`;
+							}, 2000);
 						});
 				}
 			} catch (error) {
@@ -160,6 +166,7 @@ const BookingWidget = ({ place }) => {
 							type="tel"
 							value={phone}
 							onChange={(ev) => setPhone(ev.target.value)}
+							maxLength="10"
 						/>
 						{/* {errors.phone && (
 							<span className="text-red-500 text-lg">{errors.phone}</span>

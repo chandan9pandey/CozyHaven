@@ -36,10 +36,11 @@ const Booking = () => {
 
 	return (
 		<div className="my-8">
-			<h1 className="text-3xl">{booking.place.title}</h1>
-			<AddressLink className="my-2 block">{booking.place.address}</AddressLink>
 			<div className="bg-gray-200 p-6 my-6 rounded-2xl flex items-center justify-between">
 				<div>
+					<h1 className="text-3xl font-semibold mb-4">
+						Reservation Confirmed !
+					</h1>
 					<h2 className="text-2xl mb-4">Your booking information:</h2>
 					<BookingDates booking={booking} />
 				</div>
@@ -48,7 +49,13 @@ const Booking = () => {
 					<div className="text-3xl">₹ {booking.price.toLocaleString()}</div>
 				</div>
 			</div>
-			<PlaceGallery place={booking.place} />
+			<div className="bg-gray-200 p-6 my-6 rounded-2xl flex-col items-center justify-between">
+				<h1 className="text-3xl">{booking.place.title}</h1>
+				<AddressLink className="my-4 block ">
+					{booking.place.address}
+				</AddressLink>
+				<PlaceGallery place={booking.place} />
+			</div>
 		</div>
 	);
 };
