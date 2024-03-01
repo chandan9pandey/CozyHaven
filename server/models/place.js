@@ -32,6 +32,15 @@ const placeSchema = new mongoose.Schema({
 	maxGuests: {
 		type: Number,
 	},
+	bedrooms: {
+		type: Number,
+	},
+	beds: {
+		type: Number,
+	},
+	bathrooms: {
+		type: Number,
+	},
 	price: {
 		type: Number,
 	},

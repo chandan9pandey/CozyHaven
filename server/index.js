@@ -117,7 +117,7 @@ app.post("/login", async (req, res) => {
 				} else {
 					res.status(400).json({
 						success: false,
-						error: "The username or password you entered is incorrect.",
+						error: "The email or password you entered is incorrect.",
 					});
 				}
 			});
@@ -201,6 +201,9 @@ app.post("/places", fetchUser, async (req, res) => {
 		checkIn,
 		checkOut,
 		maxGuests,
+		bedrooms,
+		beds,
+		bathrooms,
 		price,
 	} = req.body;
 	try {
@@ -215,6 +218,9 @@ app.post("/places", fetchUser, async (req, res) => {
 			checkIn,
 			checkOut,
 			maxGuests,
+			bedrooms,
+			beds,
+			bathrooms,
 			price,
 		});
 		res.json(placeDoc);
@@ -252,6 +258,9 @@ app.put("/places", fetchUser, async (req, res) => {
 		checkIn,
 		checkOut,
 		maxGuests,
+		bedrooms,
+		beds,
+		bathrooms,
 		price,
 	} = req.body;
 	try {
@@ -267,6 +276,9 @@ app.put("/places", fetchUser, async (req, res) => {
 				checkIn,
 				checkOut,
 				maxGuests,
+				bedrooms,
+				beds,
+				bathrooms,
 				price,
 			});
 			await placeDoc.save();

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import AddressLink from "../components/AddressLink";
 import PlaceGallery from "../components/PlaceGallery";
 import BookingWidget from "../components/BookingWidget";
+import Amenities from "../components/Amenities";
 import { Grid } from "react-loader-spinner";
 
 const Place = () => {
@@ -55,24 +56,37 @@ const Place = () => {
 						<div className="mt-8 mb-8 grid gap-8 grid-cols-1 md:grid-cols-[2fr_1fr]">
 							<div>
 								<div className="my-4">
-									<h2 className="font-semibold text-2xl">Description</h2>
+									<h2 className="font-semibold text-2xl mb-2">Description</h2>
 									{place.description}
 								</div>
 								Check-in: {place.checkIn}
 								<br />
 								Check-out: {place.checkOut}
 								<br />
-								Max number of guests: {place.maxGuests}
-								<div className="my-4">
-									<h2 className="font-semibold text-2xl">Perks</h2>
-									{place.description}
-								</div>
+								Guests: {place.maxGuests}
+								<br />
+								Bedrooms: {place.bedrooms}
+								<br />
+								Beds: {place.beds}
+								<br />
+								Bathrooms: {place.bathrooms}
 							</div>
 							<div>
 								<BookingWidget place={place} />
 							</div>
 						</div>
+
 						<div className="bg-white -mx-8 px-8 py-8 border-t">
+							<div>
+								{place?.perks?.length > 0 && (
+									<div className="my-4">
+										<h2 className="font-semibold text-2xl">
+											What this place offers
+										</h2>
+										<Amenities place={place} />
+									</div>
+								)}
+							</div>
 							<div>
 								<h2 className="font-semibold text-2xl">Extra info</h2>
 							</div>
