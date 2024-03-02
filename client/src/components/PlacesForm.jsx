@@ -167,25 +167,25 @@ const PlacesForm = () => {
 					type="text"
 					value={title}
 					onChange={(ev) => setTitle(ev.target.value)}
-					placeholder="title, for example: My lovely apt"
+					placeholder="For eg: My lovely apt"
 				/>
 				{preInput("Address", "Address to this place")}
 				<input
 					type="text"
 					value={address}
 					onChange={(ev) => setAddress(ev.target.value)}
-					placeholder="address"
+					placeholder="Address"
 				/>
 				{preInput("Photos", "more = better")}
 				<PhotosUploader addedPhotos={addedPhotos} onChange={setAddedPhotos} />
-				{preInput("Description", "description of the place")}
+				{preInput("Description", "Description of the place")}
 				<textarea
 					value={description}
 					onChange={(ev) => setDescription(ev.target.value)}
 				/>
 				{preInput(
 					"Check in & out times",
-					"add check in and out times, remember to have some time window for cleaning the room between guests"
+					"Add check in and out times, remember to have some time window for cleaning the room between guests"
 				)}
 				<div className="grid gap-2 grid-cols-2 md:grid-cols-4">
 					<div>
@@ -244,7 +244,7 @@ const PlacesForm = () => {
 						/>
 					</div>
 				</div>
-				{preInput("Perks", "select all the perks of your place")}
+				{preInput("Perks", "Select all the amenities provided at your place")}
 				<div className="grid mt-2 gap-2 grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
 					<Perks selected={perks} onChange={setPerks} />
 				</div>
