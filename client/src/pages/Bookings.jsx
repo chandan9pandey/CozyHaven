@@ -58,7 +58,7 @@ const Bookings = () => {
 							</Link>
 						</div>
 					)}
-					<div className="flex gap-4 flex-col">
+					<div className="flex gap-4 flex-col min-w-screen min-h-screen">
 						{bookings?.length > 0 &&
 							bookings.map((booking) => (
 								<Link

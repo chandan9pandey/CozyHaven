@@ -66,6 +66,11 @@ const Places = () => {
 				</div>
 			) : (
 				<>
+					{places?.length === 0 && (
+						<div className="flex justify-center text-xl flex-col items-center mt-10 min-h-screen">
+							No listed accommodations as of now.
+						</div>
+					)}
 					<div className="mt-4">
 						{places.length > 0 &&
 							places.map((place) => (

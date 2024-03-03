@@ -32,10 +32,10 @@ const Profile = () => {
 	}
 
 	return (
-		<div>
+		<div className="">
 			<AccountNav />
 			{subpage === undefined && (
-				<div className="text-center text-lg">
+				<div className=" flex flex-col gap-10 justify-center align-items text-center text-lg min-h-screen">
 					Logged in as {user} ({email})
 					<br />
 					<button
